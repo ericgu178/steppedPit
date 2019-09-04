@@ -41,11 +41,11 @@ cpu 最小时间单位 纳秒
 
 4g内存 是指 可用范围 （32位操作系统） 2^32 字节
 
-![](E:\web\steppedPit\study\golang\img\进程和线程.png)
+![](../img/进程和线程.png)
 
 线程并发访问共享资源
 
-![线程并发访问共享资源](E:\web\steppedPit\study\golang\img\线程并发访问共享资源.png)
+![线程并发访问共享资源](../img/线程并发访问共享资源.png)
 
 ## go程序
 
