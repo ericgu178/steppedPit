@@ -41,11 +41,11 @@ cpu 最小时间单位 纳秒
 
 4g内存 是指 可用范围 （32位操作系统） 2^32 字节
 
-![](../img/进程和线程.png)
+![](img/进程和线程.png)
 
 线程并发访问共享资源
 
-![线程并发访问共享资源](../img/线程并发访问共享资源.png)
+![线程并发访问共享资源](img/线程并发访问共享资源.png)
 
 ## go程序
 
@@ -397,24 +397,100 @@ func main()  {
 
 ```
 
-select：
-	作用： 用来监听 channel 上的数据流动方向。 读？写？
+**select**
 
-	用法： 参考 switch case 语句。 但！case后面必须是IO操作，不可以任意写判别表达式。
-	
-	注意事项：
-		1. 监听的case中，没有满足监听条件，阻塞。
-	
-		2. 监听的case中，有多个满足监听条件，任选一个执行。
-	
-		3. 可以使用default来处理所有case都不满足监听条件的状况。 通常不用（会产生忙轮询）
-	
-		4. select 自身不带有循环机制，需借助外层 for 来循环监听
-	
-		5. break 跳出 select中的一个case选项 。类似于switch中的用法。
+```go
+作用： 用来监听 channel 上的数据流动方向。 读？写？
+用法： 参考 switch case 语句。 但！case后面必须是IO操作，不可以任意写判别表达式。
 
-select实现fibonacci数列：
+注意事项：
+	1. 监听的case中，没有满足监听条件，阻塞。
 
-	1  1  2  3  5  8  13  21  34  55   89 
-	x = y
-	y = x+y	
+	2. 监听的case中，有多个满足监听条件，任选一个执行。
+
+	3. 可以使用default来处理所有case都不满足监听条件的状况。 通常不用（会产生忙轮询）
+
+	4. select 自身不带有循环机制，需借助外层 for 来循环监听
+
+	5. break 跳出 select 中的一个case选项 。类似于switch中的用法。
+
+
+例子 斐波那契数列：
+
+package main
+
+import (
+	"time"
+	"fmt"
+	"runtime"
+)
+func da(ch <- chan int,bol <- chan bool) {
+	for{
+		select {
+			case num:= <- ch:
+				fmt.Print(num," ")
+			case <- bol:
+				runtime.Goexit()
+		}
+	}
+}
+func main() {
+	ch := make(chan int)
+	quit := make(chan bool)
+
+	go da(ch,quit)
+
+	x,y := 1,1
+	for i:=0;i<20;i++ {
+		ch <- x
+		x,y = y,x+y
+	}
+	// go func() {
+	// 	for i:=0;i<5;i++{
+	// 		ch <- 2323
+	// 	}
+	// 	quit <- false
+	// 	close(ch)
+	// 	runtime.Goexit()
+	// }()
+	// for{
+	// 	select {
+	// 		case num := <- ch:
+	// 			fmt.Println("第一条都到了",num)
+	// 			break
+	// 		case <- quit:
+	// 			return
+	// 		default:
+	// 			// return
+	// 	}
+	// }
+
+}
+
+超时处理：
+
+
+package main
+
+import (
+	"time"
+	"fmt"
+)
+
+func main() {
+	ch := make(chan int)
+	bol := make(chan bool)
+
+	go func(){
+		select {
+			case v:= <-ch:
+				fmt.Println(v)
+			case <- time.After(5 * time.Second):
+				fmt.Println("超时处理")
+				bol <- true
+			}
+	}()
+
+	<- bol
+}
+```
