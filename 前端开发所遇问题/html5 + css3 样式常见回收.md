@@ -60,5 +60,83 @@ overflow: hidden;
 white-space: nowrap;
 text-overflow: ellipsis;
 
+
+// 多行换行 超出省略
+
+display: block;
+display: -webkit-box;
+word-wrap:break-word;
+margin: 0 auto;
+line-height: 1.4;
+-webkit-line-clamp: 3;
+-webkit-box-orient: vertical;
+overflow: hidden;
+text-overflow: ellipsis;
+```
+
+### 关于border 边框长度自定义的解决方案 
+
+```css
+.right{
+    position: relative;
+}
+.right::after {
+    content: '';
+    height: 120px;
+    border-left: 1px solid rgba(218,218,218);
+    position: absolute;
+    top: 40px;
+    left: 0px;
+}// 使用伪类通过定位实现
+
+#sidebarnav li:hover::after  这样 hover 变化
+```
+
+# css 动画
+
+
+
+```css
+animation: myMove1 3s linear infinite normal; // 循环
+animation: name duration timing-function delay iteration_count direction
+
+name: 是 @-webkit-keyframes 中需要指定的方法，用来执行动画。
+duration: 动画一个周期执行的时长。
+timing-function: 动画执行的效果，可以是线性的，也可以是"快速进入慢速出来"等。
+delay: 动画延时执行的时长，如果不需要可以省略。
+iteration_count: 动画循环执行次数，如果是infinite，则无限执行。
+direction: 动画执行方向，省略的话默认顺时针。
+
+
+@keyframes myMove1 {
+	0% {     
+            -webkit-transform: rotate(0deg);     
+            transform: rotate(0deg);     
+          }     
+          100% {     
+            -webkit-transform: rotate(360deg);     
+            transform: rotate(360deg);     
+          }    
+}
+
+@-webkit-keyframes myMove1 {
+	0% {     
+            -webkit-transform: rotate(0deg);     
+            transform: rotate(0deg);     
+          }     
+          100% {     
+            -webkit-transform: rotate(360deg);     
+            transform: rotate(360deg);     
+          }   
+}
+```
+
+# 字体引入
+
+```css
+@font-face {
+    font-family: '298CAI';
+    src: url('../../fonts/298-CAI978.ttf');
+  }
 ```
 

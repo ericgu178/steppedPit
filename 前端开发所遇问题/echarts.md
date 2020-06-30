@@ -8,12 +8,14 @@
 4. **areaStyle** 可以设置折线或者其他拥有其属性的样式 具体查阅官方文档
 5. 饼图中的 **hoverAnimation** 悬停无动作 设置为false 即可
 6. **color** <font size=4 color='skyblue'>最外层属性 调色盘颜色列表 图例颜色可从这里修改</font>
+7. 调整图标位置一般使用grid 饼图 用radius和center
 
 ```js
 yAxis: [{
+    	    show:false, // y 轴 不显示
             type: 'value',
             name: '单位（%）',
-            axisTick: {
+            axisTick: { // 刻度线不显示
                 show: false
             },
             axisLine: {show:false},//轴线不显示
@@ -382,6 +384,50 @@ var myCharts = echarts.init(document.getElementById('bili'))
                     series: series
                 }
                 myCharts.setOption(option)
+```
+
+## 调整图表位置 
+
+```
+grid: [{
+       left: '10%',
+       bottom: '10%',
+       top: '10%',
+       right: '10%'
+   }],
+   
+ 饼图 用
+ radius : [ '30%', '50%' ],//内外圆的大小
+center : [ '45%', '60%' ],//距离左右，上下距离的百分比
+
+```
+
+## 调整图例文字样式
+
+```js
+axisLabel: {
+            interval: 0,
+            margin:10,
+            inside: true,
+            show: true,
+            formatter : function(v) {
+            	return "{title|-----------------} {value|" + (v) +"}"
+            },
+            textStyle:{
+            	rich:{
+            		title: {
+                        fontSize: 16,
+                        lineHeight: 15,
+                        color: "rgb(1, 137, 219)"
+                    },
+                    value: {
+                        fontSize: 14,
+                        lineHeight: 20,
+                        color: "#fff"
+                    }
+            	}
+            }
+        },
 ```
 
 
